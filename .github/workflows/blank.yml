@@ -1,0 +1,28 @@
+name: VTE-14 Snapshot Deploy
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Get current branch name"
+        id: branchName
+        shell: bash
+        run: echo "::set-output name=branch::easygenerator-results-publisher-0.1.30"
+
+      - name: "Get current version"
+        uses: actions-ecosystem/action-regex-match@v2
+        id: regex-match
+        with:
+          text: ${{ steps.branchName.outputs.branch }}
+          regex: "(?<=easygenerator-results-publisher-).*"
+
+      - name: "Print snapshot and version name"
+        shell: bash
+        run: |
+          echo ${{ steps.regex-match.outputs.match }}
+
